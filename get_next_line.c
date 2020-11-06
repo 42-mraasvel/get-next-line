@@ -115,6 +115,7 @@ int		read_in_file(t_buffer *entry, char **line, ssize_t line_read)
 ** 2. If it was there, check the buffer for a line.
 ** 3. Update line_size if necessary.
 ** 4. Call the function to read in the next buffer.
+** This function returns (0) together with the last line read.
 */
 
 int		get_next_line(int fd, char **line)
