@@ -6,7 +6,7 @@
 /*   By: mraasvel <mraasvel@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/05 09:26:57 by mraasvel      #+#    #+#                 */
-/*   Updated: 2020/11/06 17:22:47 by mraasvel      ########   odam.nl         */
+/*   Updated: 2020/11/06 20:27:43 by mraasvel      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,31 +83,47 @@ ssize_t	copy_buffer_to_line(t_buffer *entry, char **line)
 ** return :  1 Line has been read.
 */
 
-int		read_in_file(t_buffer *entry, char **line, ssize_t line_read)
+int		read_in_file(t_buffer *entry, char **line)
 {
-	ssize_t	read_return;
+	int	read_value;
+	int	line_read;
 
 	while (1)
 	{
-		read_return = read(entry->fd, entry->buffer, BUFFER_SIZE);
-		if (read_return == -1 && entry->line_size != 0)
+		read_value = read(entry->fd, entry->buffer, BUFFER_SIZE);
+		if (read_value == -1 && entry->line_size > 0)
 			free(*line);
-		if (read_return == -1)
+		if (read_value == -1)
 			return (-1);
-		entry->buffer[read_return] = 0;
-		if (line_read == 0 && read_return != 0)
+		entry->buffer[read_value] = '\0';
+		if (read_value == 0 && entry->line_size > 0)
 			return (1);
-		if (line_read == 0 && read_return == 0)
-			return (0);
 		line_read = copy_buffer_to_line(entry, line);
-		if (line_read == -1 && entry->line_size != 0)
+		if (line_read == -1 && entry->line_size > 0)
 			free(*line);
 		if (line_read == -1)
 			return (-1);
-		if (line_read == 0 && entry->position != 0)
+		if (read_value == 0 && line_read == 0)
+			return (0);
+		else if (line_read == 0)
 			return (1);
 	}
-	return (0);
+}
+
+int		process_fd(char **line, t_buffer *entry, ssize_t return_value)
+{
+	if (return_value == 0 && entry->position != 0)
+	{
+		return_value = copy_buffer_to_line(entry, line);
+		if (return_value == -1)
+			return (-1);
+		if (return_value == 0 && entry->buffer[0] == '\0')
+			return (0);
+		if (return_value == 0)
+			return (1);
+	}
+	return_value = read_in_file(entry, line);
+	return (return_value);
 }
 
 /*
@@ -115,7 +131,6 @@ int		read_in_file(t_buffer *entry, char **line, ssize_t line_read)
 ** 2. If it was there, check the buffer for a line.
 ** 3. Update line_size if necessary.
 ** 4. Call the function to read in the next buffer.
-** This function returns (0) together with the last line read.
 */
 
 int		get_next_line(int fd, char **line)
@@ -124,22 +139,16 @@ int		get_next_line(int fd, char **line)
 	t_buffer		*entry;
 	ssize_t			return_value;
 
+	if (line == 0)
+		return (-1);
 	return_value = (ssize_t)add_fd_to_lst(&start, fd);
 	if (return_value == -1)
 		return (ft_clear_lst(&start));
 	entry = start;
-	while (entry->next != 0 && entry->fd != fd)
+	while (entry->fd != fd)
 		entry = entry->next;
 	entry->line_size = 0;
-	if (return_value == 0)
-	{
-		return_value = copy_buffer_to_line(entry, line);
-		if (return_value == -1)
-			return (ft_clear_lst(&start));
-		if (return_value == 0 && entry->position != 0)
-			return (1);
-	}
-	return_value = read_in_file(entry, line, return_value);
+	return_value = process_fd(line, entry, return_value);
 	if (return_value == -1)
 		return (ft_clear_lst(&start));
 	if (return_value == 0)

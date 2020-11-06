@@ -6,7 +6,7 @@
 /*   By: mraasvel <mraasvel@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/03 13:17:56 by mraasvel      #+#    #+#                 */
-/*   Updated: 2020/11/06 16:36:00 by mraasvel      ########   odam.nl         */
+/*   Updated: 2020/11/06 20:26:06 by mraasvel      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 typedef struct		s_buffer
 {
-	char			buffer[BUFFER_SIZE + 1];
+	char			*buffer;
 	size_t			position;
 	size_t			line_size;
 	int				fd;

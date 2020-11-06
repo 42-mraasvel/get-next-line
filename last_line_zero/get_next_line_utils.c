@@ -6,7 +6,7 @@
 /*   By: mraasvel <mraasvel@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/05 09:26:53 by mraasvel      #+#    #+#                 */
-/*   Updated: 2020/11/06 16:55:40 by mraasvel      ########   odam.nl         */
+/*   Updated: 2020/11/06 20:25:42 by mraasvel      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int			ft_clear_lst(t_buffer **start)
 	while (finder != 0)
 	{
 		finder = finder->next;
+		free((*start)->buffer);
 		free(*start);
 		*start = finder;
 	}
@@ -63,6 +64,12 @@ t_buffer	*ft_create_elem(int fd)
 	new = (t_buffer*)malloc(1 * sizeof(t_buffer));
 	if (new == 0)
 		return (0);
+	new->buffer = (char*)malloc(BUFFER_SIZE + 1);
+	if (new->buffer == 0)
+	{
+		free(new);
+		return (0);
+	}
 	new->next = 0;
 	new->position = 0;
 	new->fd = fd;
@@ -126,6 +133,7 @@ int			del_fd_from_list(t_buffer **start, int fd)
 				*start = finder->next;
 			else
 				previous->next = finder->next;
+			free(finder->buffer);
 			free(finder);
 			break ;
 		}
