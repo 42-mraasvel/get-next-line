@@ -6,7 +6,7 @@
 /*   By: mraasvel <mraasvel@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/05 09:26:57 by mraasvel      #+#    #+#                 */
-/*   Updated: 2020/11/07 14:12:34 by mraasvel      ########   odam.nl         */
+/*   Updated: 2020/11/07 20:36:20 by mraasvel      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ size_t	count_bytes(t_buffer *entry)
 ** return :  0 Finished reading line.
 ** return :  1 Line has been updated, but is not finished.
 ** Will update line_size in the list node.
-** At the end it checks if a newline or null terminator was encountered.
+** At the end it checks if a newline was encountered.
 */
 
 int		copy_buffer_to_line(t_buffer *entry, char **line)
@@ -81,6 +81,7 @@ int		copy_buffer_to_line(t_buffer *entry, char **line)
 ** return :  0 EOF has been read.
 ** return :  1 Line has been read.
 ** 1. Read file into buffer.
+**    NULL terminate buffer.
 ** 2. Call copy_buffer_to_line.
 **    This will clear the buffer
 ** 3. Return 1 if line was found in buffer,
@@ -155,8 +156,8 @@ int		get_next_line(int fd, char **line)
 	t_buffer		*entry;
 	int				return_value;
 
-	if (line == 0)
-		return (-1);
+	if (line == 0 || BUFFER_SIZE <= 0)
+		return (ft_clear_lst(&start));
 	return_value = add_fd_to_lst(&start, fd);
 	if (return_value == -1)
 		return (ft_clear_lst(&start));
