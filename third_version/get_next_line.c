@@ -6,13 +6,13 @@
 /*   By: mraasvel <mraasvel@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/05 09:26:57 by mraasvel      #+#    #+#                 */
-/*   Updated: 2020/11/07 20:36:20 by mraasvel      ########   odam.nl         */
+/*   Updated: 2020/11/09 14:02:21 by mraasvel      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <unistd.h>
-#include "get_next_line.h"
+#include "get_next_line.h" // change this header if bonus
 
 /*
 ** Counts bytes to read in from buffer.
@@ -26,12 +26,13 @@ size_t	count_bytes(t_buffer *entry)
 	size_t	bytes_read;
 
 	i = entry->position;
-	while (entry->buffer[i] && entry->buffer[i] != '\n' && i < BUFFER_SIZE)
+	while (entry->buffer[i] && entry->buffer[i] != '\n'
+	&& i < (size_t)BUFFER_SIZE)
 		i++;
 	bytes_read = i - entry->position;
-	if (entry->buffer[i] == '\n' && i == BUFFER_SIZE - 1)
+	if (entry->buffer[i] == '\n' && i + 1 == (size_t)BUFFER_SIZE)
 		entry->position = 0;
-	else if (entry->buffer[i] == '\0' || i == BUFFER_SIZE)
+	else if (entry->buffer[i] == '\0' || i == (size_t)BUFFER_SIZE)
 		entry->position = 0;
 	else if (entry->buffer[i] == '\n' && entry->buffer[i + 1] == '\0')
 		entry->position = 0;
@@ -71,7 +72,7 @@ int		copy_buffer_to_line(t_buffer *entry, char **line)
 	while (entry->buffer[pos + i] && entry->buffer[pos + i] != '\n'
 	&& i < new_size)
 		i++;
-	if (entry->buffer[pos + i] == '\n' && i + pos != BUFFER_SIZE)
+	if (entry->buffer[pos + i] == '\n' && i + pos != (size_t)BUFFER_SIZE)
 		return (0);
 	return (1);
 }

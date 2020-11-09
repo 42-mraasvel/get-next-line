@@ -6,12 +6,12 @@
 /*   By: mraasvel <mraasvel@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/03 13:17:56 by mraasvel      #+#    #+#                 */
-/*   Updated: 2020/11/07 14:07:41 by mraasvel      ########   odam.nl         */
+/*   Updated: 2020/11/09 14:02:28 by mraasvel      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H //change this define if bonus
 
 # include <stddef.h>
 

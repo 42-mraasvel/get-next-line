@@ -6,12 +6,12 @@
 /*   By: mraasvel <mraasvel@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/05 09:26:53 by mraasvel      #+#    #+#                 */
-/*   Updated: 2020/11/07 14:10:24 by mraasvel      ########   odam.nl         */
+/*   Updated: 2020/11/09 14:02:14 by mraasvel      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "get_next_line.h"
+#include "get_next_line.h" // change this header if bonus
 
 void		*ft_memcpy(void *dest, const void *src, size_t n)
 {
@@ -62,7 +62,7 @@ t_buffer	*ft_create_elem(int fd)
 	new = (t_buffer*)malloc(1 * sizeof(t_buffer));
 	if (new == 0)
 		return (0);
-	new->buffer = (char*)malloc(BUFFER_SIZE + 1);
+	new->buffer = (char*)malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (new->buffer == 0)
 	{
 		free(new);
