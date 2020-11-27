@@ -18,6 +18,7 @@
 	- No leaks if you stop calling GNL before EOF
 
 **Bonus part**
+
 	- Works for multiple FDs.
 	- Will have unfreed memory that was allocated if GNL calls stop before EOF.
 	- Uses linked list to handle multiple FDs, one list element per FD.
